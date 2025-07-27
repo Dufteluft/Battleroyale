@@ -8,13 +8,8 @@ ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 -- Lädt die Konfiguration und Utility-Funktionen
-dofile('shared/config.lua')
-dofile('shared/utils.lua')
-
--- Lädt die Klassen
-dofile('client/classes/UIManager.lua')
-dofile('client/classes/ZoneManager.lua')
-dofile('client/classes/EffectsManager.lua')
+-- Die Dateien werden nun über das fxmanifest geladen.
+-- dofile wird nicht mehr benötigt.
 
 -- Globale Instanzen der Manager-Klassen
 UIManagerInstance = nil
@@ -33,12 +28,7 @@ function InitializeClient()
 end
 
 -- Lädt die Event-Handler
-dofile('client/events/game_events.lua')
-dofile('client/events/zone_events.lua')
-dofile('client/events/inventory_events.lua')
-
--- Lädt das Loot-System
-dofile('client/loot_system.lua')
+-- Die Dateien werden nun über das fxmanifest geladen.
 
 -- Initialisiere den Client beim Start
 InitializeClient()

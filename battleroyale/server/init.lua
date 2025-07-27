@@ -8,14 +8,8 @@ ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 -- Lädt die Konfiguration und Utility-Funktionen
-dofile('shared/config.lua')
-dofile('shared/utils.lua')
-
--- Lädt die Klassen
-dofile('server/classes/GameManager.lua')
-dofile('server/classes/InventoryManager.lua')
-dofile('server/classes/LootManager.lua')
-dofile('server/classes/AntiCheatManager.lua')
+-- Die Dateien werden nun über das fxmanifest geladen.
+-- dofile wird nicht mehr benötigt.
 
 -- Initialisiert die Datenbank
 CreateThread(function()
@@ -60,12 +54,6 @@ CreateThread(function()
 end)
 
 -- Lädt die Event-Handler
-dofile('server/events/game_events.lua')
-dofile('server/events/inventory_events.lua')
-dofile('server/events/loot_events.lua')
-
--- Lädt den Koordinator und die Commands
-dofile('server/main.lua')
-dofile('server/commands.lua')
+-- Die Dateien werden nun über das fxmanifest geladen.
 
 Utils.Log('Battle Royale System (Server) geladen.')
