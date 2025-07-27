@@ -7,12 +7,11 @@
 ]]
 
 -- Event: Loot wird aufgesammelt
-AddEventHandler('battleroyale:pickupLoot', function(objectNetId)
+AddEventHandler('battleroyale:pickupLoot', function(lootId)
     local source = source
-    local object = NetToObj(objectNetId)
 
     if BR_LootManager and BR_GameManager:isPlayerInGame(source) then
-        BR_LootManager:handlePickup(source, object)
+        BR_LootManager:handlePickup(source, lootId)
     end
 end)
 

@@ -11,17 +11,30 @@ local isNearLoot = false
 
 -- Event: Loot-Objekt spawnen
 RegisterNetEvent('battleroyale:spawnLootObject')
-AddEventHandler('battleroyale:spawnLootObject', function(object, lootId, rarity)
+AddEventHandler('battleroyale:spawnLootObject', function(lootId, lootData, position)
+    local objectName = 'prop_box_ammo04a' -- Platzhalter-Objekt
+    local object = CreateObject(GetHashKey(objectName), position, true, true, true)
+    PlaceObjectOnGroundProperly(object)
+
     spawnedLoot[object] = {
         id = lootId,
-        rarity = rarity
+        rarity = lootData.rarity,
+        object = object
     }
 end)
 
 -- Event: Loot-Objekt entfernen
 RegisterNetEvent('battleroyale:removeLootObject')
-AddEventHandler('battleroyale:removeLootObject', function(object)
-    spawnedLoot[object] = nil
+AddEventHandler('battleroyale:removeLootObject', function(lootId)
+    for k, v in pairs(spawnedLoot) do
+        if v.id == lootId then
+            if DoesEntityExist(v.object) then
+                DeleteEntity(v.object)
+            end
+            spawnedLoot[k] = nil
+            break
+        end
+    end
 end)
 
 -- Event: Alle Loot-Objekte entfernen
@@ -47,7 +60,7 @@ CreateThread(function()
                     isNearLoot = true
                     ESX.ShowHelpNotification("Drücke [E], um Loot aufzuheben.")
                     if IsControlJustReleased(0, 38) then -- E-Taste
-                        TriggerServerEvent('battleroyale:pickupLoot', ObjToNet(object))
+                        TriggerServerEvent('battleroyale:pickupLoot', data.id)
                     end
                     break -- Verlasse die Schleife, da wir nur eine Meldung anzeigen wollen
                 end

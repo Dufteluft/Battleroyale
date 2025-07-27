@@ -48,23 +48,18 @@ end
 
 -- Spawnt ein bestimmtes Item an einer Position
 function LootManager:spawnLootAtPosition(position, lootData)
-    local objectName = 'prop_box_ammo04a' -- Platzhalter-Objekt
-    local object = CreateObject(GetHashKey(objectName), position, true, true, true)
-    SetEntityAsMissionEntity(object, true, true)
-    PlaceObjectOnGroundProperly(object)
-
     local lootId = 'loot_' .. Utils.Random(1000, 9999)
-    self.spawnedLoot[object] = {
-        id = lootId,
+    self.spawnedLoot[lootId] = {
         item = lootData.item,
         type = lootData.type, -- 'weapon' or 'item'
         rarity = lootData.rarity,
         amount = lootData.amount,
-        ammo = lootData.ammo
+        ammo = lootData.ammo,
+        position = position
     }
 
-    -- Trigger Client-Event, um das Loot-Objekt anzuzeigen (z.B. mit Text)
-    TriggerClientEvent('battleroyale:spawnLootObject', -1, object, lootId, lootData.rarity)
+    -- Trigger Client-Event, um das Loot-Objekt zu erstellen und anzuzeigen
+    TriggerClientEvent('battleroyale:spawnLootObject', -1, lootId, lootData, position)
 end
 
 -- Wählt Loot basierend auf der Seltenheit aus
@@ -97,9 +92,9 @@ function LootManager:getLootByRarity()
 end
 
 -- Behandelt das Aufsammeln von Loot
-function LootManager:handlePickup(source, object)
-    if self.spawnedLoot[object] then
-        local loot = self.spawnedLoot[object]
+function LootManager:handlePickup(source, lootId)
+    if self.spawnedLoot[lootId] then
+        local loot = self.spawnedLoot[lootId]
         local player = ESX.GetPlayerFromId(source)
 
         if loot.type == 'weapon' then
@@ -108,12 +103,11 @@ function LootManager:handlePickup(source, object)
             InventoryManager:giveItem(source, loot.item, loot.amount)
         end
 
-        DeleteObject(object)
-        self.spawnedLoot[object] = nil
+        self.spawnedLoot[lootId] = nil
         Utils.Log(player.name .. ' hat ' .. loot.item .. ' aufgesammelt.')
 
         -- Entferne das Loot-Objekt auf den Clients
-        TriggerClientEvent('battleroyale:removeLootObject', -1, object)
+        TriggerClientEvent('battleroyale:removeLootObject', -1, lootId)
     end
 end
 
