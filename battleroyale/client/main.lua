@@ -7,27 +7,7 @@
 ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-local resourcePath = get_resource_path(GetCurrentResourceName())
-
-local function loadFile(path)
-    local fullPath = resourcePath .. '/' .. path
-    print('Lade Datei: ' .. fullPath)
-    local success, err = pcall(dofile, fullPath)
-    if not success then
-        print('Fehler beim Laden von ' .. path .. ': ' .. err)
-    else
-        print(path .. ' erfolgreich geladen.')
-    end
-end
-
--- Lädt die Konfiguration und Utility-Funktionen
-loadFile('shared/config.lua')
-loadFile('shared/utils.lua')
-
--- Lädt die Klassen
-loadFile('client/classes/UIManager.lua')
-loadFile('client/classes/ZoneManager.lua')
-loadFile('client/classes/EffectsManager.lua')
+-- Die Dateien werden nun über das fxmanifest geladen.
 
 -- Globale Instanzen der Manager-Klassen
 UIManagerInstance = nil
